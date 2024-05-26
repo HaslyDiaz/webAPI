@@ -1,0 +1,122 @@
+--CREAR BASE DE DATOS 
+create database DDCrud
+
+go
+use DDCrud
+
+go
+
+-- CREAR TABLAS DENTRO DE la base de datos
+
+
+create table Empl(
+IdEmplint primary key identity,
+NombreCompleto varchar(50),
+Correo varchar(50),
+Sueldo decimal(10,2),
+FechaContrato date
+)
+
+go
+insert into Empl(NombreCompleto,Correo,Sueldo,FechaContrato)
+values
+('Miguel Barreto','MiguelBarreto@gmail.com',4500,'2024-01-12'),
+('HaslyDiaz','HaslyDiaz@gmail.com',4500,'2024-06-09')
+select * from Empl
+
+go
+
+--creacion de los procedimientos sp para listar, obtener, eliminar, editar, crear
+
+create procedure sp_listaEmpls
+as
+begin
+	
+	select 
+	IdEmpl,
+	NombreCompleto,
+	Correo,
+	Sueldo,
+	convert(char(10),FechaContrato,103)[FechaContrato]
+	from Empl
+	
+end
+
+go
+
+create procedure sp_obtenerEmpl
+(
+@IdEmplint
+)
+as
+begin
+	
+	select 
+	IdEmpl,
+	NombreCompleto,
+	Correo,
+	Sueldo,
+	convert(char(10),FechaContrato,103)[FechaContrato]
+	from Emplwhere IdEmpl= @IdEmpl
+	
+end
+
+go
+
+create procedure sp_crearEmpl(
+@NombreCompleto varchar(50),
+@Correo varchar(50),
+@Sueldo decimal(10,2),
+@FechaContrato varchar(10)
+)
+as
+begin
+	set dateformat dmy
+
+	insert into Empl
+	(
+	NombreCompleto,
+	Correo,
+	Sueldo,
+	FechaContrato
+	)
+	values
+	(
+	@NombreCompleto,
+	@Correo,
+	@Sueldo,
+	convert(date,@FechaContrato)
+	)
+end
+
+go
+
+create procedure sp_editarEmpl(
+@IdEmplint,
+@NombreCompleto varchar(50),
+@Correo varchar(50),
+@Sueldo decimal(10,2),
+@FechaContrato varchar(10)
+)
+as
+begin
+	set dateformat dmy
+
+	update Empl
+	set
+	NombreCompleto = @NombreCompleto,
+	Correo = @Correo,
+	Sueldo = @Sueldo,
+	FechaContrato = convert(date,@FechaContrato)
+	where IdEmpl= @IdEmpl
+end
+
+go
+
+create procedure sp_eliminarEmpl(
+@IdEmplint
+)
+as
+begin
+
+end
